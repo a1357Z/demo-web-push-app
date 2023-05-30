@@ -8,7 +8,23 @@
 </head>
 <body>
     <h1>Demo push Notification</h1>
+    <script>
+        // Create a new script element
+        let secondScript = document.createElement('script');
+        let firstScript = document.createElement('script');
 
-    <script src="client.js" type="module"></script>
+        // Set the source of the second script
+        secondScript.src = './vendor1.js';
+        firstScript.src = './vendor2.js';
+
+        document.body.appendChild(firstScript);
+
+        // Add an event listener to the first script to detect when it is loaded
+        firstScript.addEventListener('load', function() {
+        // Append the second script to the document
+            document.body.appendChild(secondScript);
+        });
+
+    </script>
 </body>
 </html>

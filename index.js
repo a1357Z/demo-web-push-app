@@ -23,12 +23,25 @@ webpush.setVapidDetails('mailto:ajay.yadav@netcorecloud.com', publicVapidKey,pri
 
 //array of subscribers
 let subscribers = []
+let subscribers2 = []
 
 //subscribe route
 app.post('/subscribe', (req, res)=>{
     //get push subscription object from the request
     const subscription = req.body;
+    console.log("/subscribe: ", subscription)
     subscribers.push(subscription);
+
+    //send status 201 for the request
+    res.status(201).json( {message : "we will send u notifications regarding time."} )
+})
+
+app.post('/subscribe-2', (req, res)=>{
+    
+    //get push subscription object from the request
+    const subscription = req.body;
+    console.log("/subscribe-2: ", subscription)
+    subscribers2.push(subscription);
 
     //send status 201 for the request
     res.status(201).json( {message : "we will send u notifications regarding time."} )
@@ -41,11 +54,16 @@ let job = new CronJob(
 		console.log('Time to send notifications to the clients');
 
         //create paylod: specified the detals of the push notification
-        const payload = JSON.stringify({title: 'Demo Push Notification', message: `Your current time is: ${new Date().toLocaleDateString()}` });
+        const payload = JSON.stringify({title: 'From vendor 1', message: `Your current time is: ${new Date().getTime()}`, origin: "vendor1" });
+        const payload2 = JSON.stringify({title: 'From vendor 2', message: `Your current time is: ${new Date().getTime()}`, origin: "vendor2" });
 
         //pass the object into sendNotification fucntion and catch any error
         subscribers.forEach(subscription => {
             webpush.sendNotification(subscription, payload).catch(err=> console.error(err));
+        })
+
+        subscribers2.forEach(subscription => {
+            webpush.sendNotification(subscription, payload2).catch(err=> console.error(err));
         })
         
 	},
